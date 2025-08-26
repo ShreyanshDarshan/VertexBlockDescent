@@ -5,6 +5,7 @@ using UnityEditor;
 
 public class VBDPoint : MonoBehaviour
 {
+    public float mass;
     public Vector3 velocity = new Vector3(0, 0, 0);
     public Vector3 prevPosition = new Vector3(0, 0, 0);
     // Vector3 position = new Vector3(0, 0, 0);

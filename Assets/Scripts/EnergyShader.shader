@@ -9,6 +9,7 @@ Shader "Unlit/EnergyShader"
         _SpringConstant ("Spring Constant", Float) = 1.0
         _SpringPosition ("Spring Position", Vector) = (0,0,0,0)
         _SpringLength ("Spring Length", Float) = 1.0
+        _ScaleConstant ("Scale Constant", Float) = 1.0
     }
     SubShader
     {
@@ -47,6 +48,7 @@ Shader "Unlit/EnergyShader"
             float _SpringConstant;
             float4 _SpringPosition;
             float _SpringLength;
+            float _ScaleConstant;
 
             v2f vert (appdata v)
             {
@@ -89,7 +91,7 @@ Shader "Unlit/EnergyShader"
                 float spring_displacement = length(springvec) - _SpringLength;
                 float spring_energy = 0.5 * _SpringConstant * spring_displacement * spring_displacement;
                 // fixed4 col = momentum_energy * fixed4(1, 1, 1, 1);
-                fixed4 col = turbo_cmap(momentum_energy + spring_energy);
+                fixed4 col = turbo_cmap((momentum_energy + spring_energy) / _ScaleConstant);
                 // apply fog
                 // UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
