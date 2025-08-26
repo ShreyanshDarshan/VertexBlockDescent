@@ -8,6 +8,9 @@ public class VBDSolver : MonoBehaviour
     // A static reference to the instance of the class.
     public static VBDSolver Instance { get; private set; }
     public static float deltaTime = 0.02f; // Default delta time for physics calculations
+    public static Vector3 gravity = Vector3.down * 9.81f; // Default gravity vector
+    public Vector3 _gravity = Vector3.zero; // Override gravity if needed
+    public float _deltaTime = 0.02f; // Override delta time if needed
     public HashSet<VBDPoint> points = new HashSet<VBDPoint>();
     public bool canSimulate = false;
     public bool hasFinishedIteration = true;
@@ -35,6 +38,8 @@ public class VBDSolver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        gravity = _gravity;
+        deltaTime = _deltaTime; // Use the overridden delta time if set
         if (Input.GetKeyDown(KeyCode.Space))
         {
             canSimulate = true;
