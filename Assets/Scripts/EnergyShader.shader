@@ -7,6 +7,8 @@ Shader "Unlit/EnergyShader"
         _Mass ("Mass", Float) = 1.0
         _DeltaTime ("DeltaTime", Float) = 0.0
         _SpringConstant ("Spring Constant", Float) = 1.0
+        _SpringPosition ("Spring Position", Vector) = (0,0,0,0)
+        _SpringLength ("Spring Length", Float) = 1.0
     }
     SubShader
     {
@@ -43,6 +45,8 @@ Shader "Unlit/EnergyShader"
             float _Mass;
             float _DeltaTime;
             float _SpringConstant;
+            float4 _SpringPosition;
+            float _SpringLength;
 
             v2f vert (appdata v)
             {
@@ -81,8 +85,11 @@ Shader "Unlit/EnergyShader"
                 // sample the texture
                 float3 rvec = _Position.xyz - i.world_vertex.xyz;
                 float momentum_energy = 0.5 * _Mass * dot(rvec, rvec) / _DeltaTime;
+                float3 springvec = _SpringPosition.xyz - i.world_vertex.xyz;
+                float spring_displacement = length(springvec) - _SpringLength;
+                float spring_energy = 0.5 * _SpringConstant * spring_displacement * spring_displacement;
                 // fixed4 col = momentum_energy * fixed4(1, 1, 1, 1);
-                fixed4 col = turbo_cmap(momentum_energy);
+                fixed4 col = turbo_cmap(momentum_energy + spring_energy);
                 // apply fog
                 // UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
