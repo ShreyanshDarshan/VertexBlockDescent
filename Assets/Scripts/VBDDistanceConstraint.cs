@@ -52,19 +52,18 @@ public class VBDDistanceConstraint : VBDConstraint
         float[] energies = new float[vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
         {
-            energies[i] = CalculateEnergy(vertices[i], points[0], points[1]);
+            energies[i] = ConstraintEnergy(vertices[i], points[1]) + points[0].MomentumEnergy(vertices[i]);
         }
 
         float maxEnergy = Mathf.Max(energies);
         planeMaterial.SetFloat("_ScaleConstant", maxEnergy);
     }
 
-    float CalculateEnergy(Vector3 point, VBDPoint p1, VBDPoint p2)
+    float ConstraintEnergy(Vector3 point, VBDPoint p2)
     {
-        float distance = Vector3.Distance(p1.transform.position, p2.transform.position);
+        float distance = Vector3.Distance(point, p2.transform.position);
         float springForce = springConstant * (distance - restLength);
         float spring_energy = 0.5f * springForce * (distance - restLength);
-        float momentum_energy = 0.5f * p1.mass * (point - p1.transform.position).sqrMagnitude / VBDSolver.deltaTime / VBDSolver.deltaTime;
-        return spring_energy + momentum_energy;
+        return spring_energy;
     }
 }

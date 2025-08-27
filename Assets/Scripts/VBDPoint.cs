@@ -69,4 +69,9 @@ public class VBDPoint : MonoBehaviour
         Vector3 projectedPos = CalculatePosition(transform.position, VBDSolver.deltaTime);
         futureGhost.transform.position = projectedPos;
     }
+
+    public float MomentumEnergy(Vector3 point)
+    {
+        return 0.5f * mass * (point - transform.position).sqrMagnitude / VBDSolver.deltaTime / VBDSolver.deltaTime;
+    }
 }
